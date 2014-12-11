@@ -23,11 +23,21 @@ _stgit()
             return 0
             ;;
         *)
-            COMPREPLY=( $( compgen -W "$( $1 help | awk '/^  / {print $1}')" \
-                        -- "$cur" ) )
+            if _stgit_inited; then
+                COMPREPLY=( $( compgen -W "$( $1 help | awk '/^  / {print $1}')" \
+                            -- "$cur" ) )
+            else
+                COMPREPLY=( $( compgen -W "help version copyright init" -- "$cur" ) )
+            fi
             ;;
     esac
 }
+
+_stgit_inited()
+{
+    $1 series >&/dev/null
+}
+
 complete -F _stgit stg
 
 # Local variables:
