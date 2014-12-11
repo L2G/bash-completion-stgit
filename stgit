@@ -11,7 +11,11 @@ _stgit()
     _split_longopt && split=true
 
     case $prev in
-        -h|--help|help|copyright|version)
+        help)
+            _stgit_add_all_commands
+            return 0
+            ;;
+        copyright|version|-h|-help)
             return 0
             ;;
         init)
@@ -29,9 +33,7 @@ _stgit()
             ;;
         *)
             if _stgit_inited; then
-                COMPREPLY=( ${COMPREPLY[@]} \
-                                $( compgen -W "$( stg help | awk '/^  / {print $1}')" \
-                            -- "$cur" ) )
+                _stgit_add_all_commands
             else
                 COMPREPLY=( ${COMPREPLY[@]} \
                                 $( compgen -W "help version copyright init" \
@@ -39,6 +41,13 @@ _stgit()
             fi
             ;;
     esac
+}
+
+_stgit_add_all_commands()
+{
+    COMPREPLY=( ${COMPREPLY[@]} \
+                    $( compgen -W "$( stg help | awk '/^  / {print $1}')" \
+                -- "$cur" ) )
 }
 
 _stgit_add_help_flag()
