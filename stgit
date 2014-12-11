@@ -21,7 +21,7 @@ _stgit()
             return 0
             ;;
         init)
-            __stgit_compadd_help_flag
+            __stgit_compadd "--help"
             return 0
             ;;
     esac
