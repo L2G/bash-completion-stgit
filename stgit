@@ -12,14 +12,14 @@ _stgit()
 
     case $prev in
         help)
-            _stgit_add_all_commands
+            __stgit_compadd_all_commands
             return 0
             ;;
         copyright|version|-h|-help)
             return 0
             ;;
         init)
-            _stgit_add_help_flag
+            __stgit_compadd_help_flag
             return 0
             ;;
     esac
@@ -28,34 +28,33 @@ _stgit()
 
     case $cur in
         -*)
-            _stgit_add_help_flag
+            __stgit_compadd "--help"
             return 0
             ;;
         *)
-            if _stgit_inited; then
-                _stgit_add_all_commands
+            if __stgit_inited; then
+                __stgit_compadd_all_commands
             else
                 COMPREPLY=( ${COMPREPLY[@]} \
                                 $( compgen -W "help version copyright init" \
                             -- "$cur" ) )
             fi
+            return 0
             ;;
     esac
 }
 
-_stgit_add_all_commands()
+__stgit_compadd()
 {
-    COMPREPLY=( ${COMPREPLY[@]} \
-                    $( compgen -W "$( stg help | awk '/^  / {print $1}')" \
-                -- "$cur" ) )
+    COMPREPLY=( ${COMPREPLY[@]} $( compgen -W "$1" -- "$cur" ) )
 }
 
-_stgit_add_help_flag()
+__stgit_compadd_all_commands()
 {
-    COMPREPLY=( ${COMPREPLY[@]} $( compgen -W '--help' -- "$cur" ) )
+    __stgit_compadd "$( stg help | awk '/^  / {print $1}')"
 }
 
-_stgit_inited()
+__stgit_inited()
 {
     stg series >&/dev/null
 }
