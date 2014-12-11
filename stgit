@@ -20,6 +20,13 @@ _stgit()
         copyright|version|-h|-help)
             return 0
             ;;
+        branch)
+            __stgit_compadd "
+                --cleanup --clone --create --delete --description= --help
+                --list --merge --protect --rename --unprotect
+            "
+            return 0
+            ;;
         init)
             __stgit_compadd "--help"
             return 0
