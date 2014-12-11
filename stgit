@@ -11,7 +11,7 @@ _stgit()
     _split_longopt && split=true
 
     case $prev in
-        -h|--help|copyright|version)
+        -h|--help|help|copyright|version)
             return 0
             ;;
         init)
@@ -43,7 +43,7 @@ _stgit()
 
 _stgit_add_help_flag()
 {
-    COMPREPLY=( ${COMPREPLY[@]} $( compgen -W '-h --help' -- "$cur" ) )
+    COMPREPLY=( ${COMPREPLY[@]} $( compgen -W '--help' -- "$cur" ) )
 }
 
 _stgit_inited()
